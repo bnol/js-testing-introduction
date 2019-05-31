@@ -1,31 +1,54 @@
-const puppeteer = require('puppeteer');
-const { generateText, checkAndGenerate } = require('./util');
+// const {
+//   generateText,
+//   validateInput,
+//   checkAndGenerate,
+//   createElement,
+// } = require("./util");
 
-test('should output name and age', () => {
-  const text = generateText('Max', 29);
-  expect(text).toBe('Max (29 years old)');
-});
+// test("should output name and age", () => {
+//   const text = generateText("BnoL", 30);
+//   expect(text).toBe("BnoL (30 years old)");
+//   const text2 = generateText("Leo", 20);
+//   expect(text2).toBe("Leo (20 years old)");
+// });
 
-test('should generate a valid text output', () => {
-  const text = checkAndGenerate('Max', 29);
-  expect(text).toBe('Max (29 years old)');
-});
+// test("should validate the input", () => {
+//   expect(validateInput("BnoL", true, false)).toBe(true);
+//   expect(validateInput("", true, false)).toBe(false);
+//   expect(validateInput(20, false, true)).toBe(true);
+//   expect(validateInput("", false, true)).toBe(false);
+//   expect(validateInput(" ", true, false)).toBe(false);
+//   expect(validateInput("phuc", true, true)).toBe(false);
+// });
 
-test('should create an element with text and correct class', async () => {
+// test("should generate a valid text output", () => {
+//   const text = checkAndGenerate("Phuong Trinh", 28);
+//   expect(text).toBe("Phuong Trinh (28 years old)");
+//   const text2 = checkAndGenerate("", 28);
+//   expect(text2).toBe(false);
+// });
+
+// test("should create correct element", () => {
+//   const element = createElement("div", "Hello World!", "test-class-name");
+//   expect(element).toBeInstanceOf(HTMLDivElement);
+//   expect(element.classList[0]).toEqual("test-class-name");
+//   expect(element.textContent).toEqual("Hello World!");
+// });
+
+const puppeteer = require("puppeteer");
+test("should create an element with text and correct class", async () => {
   const browser = await puppeteer.launch({
-    headless: true,
-    // slowMo: 80,
-    // args: ['--window-size=1920,1080']
+    headless: false,
+    slowMo: 80,
+    args: ["--window-size=1920,1080"],
   });
   const page = await browser.newPage();
-  await page.goto(
-    'file:///Users/mschwarzmueller/development/teaching/youtube/js-testing/index.html'
-  );
-  await page.click('input#name');
-  await page.type('input#name', 'Anna');
-  await page.click('input#age');
-  await page.type('input#age', '28');
-  await page.click('#btnAddUser');
-  const finalText = await page.$eval('.user-item', el => el.textContent);
-  expect(finalText).toBe('Anna (28 years old)');
-}, 10000);
+  await page.goto("http://localhost:5000");
+  await page.click("#name");
+  await page.type("#name", "BnoL");
+  await page.click("#age");
+  await page.type("#age", "30");
+  await page.click("#submit");
+  const finalText = await page.$eval(".user-item", el => el.textContent);
+  expect(finalText).toBe("BnoL (30 years old)");
+});
